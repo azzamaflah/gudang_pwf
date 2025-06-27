@@ -21,17 +21,15 @@ class AuthServiceProvider extends ServiceProvider
     /**
      * Register any authentication / authorization services.
      */
-    public function boot(): void
+    public function boot()
     {
         $this->registerPolicies();
 
-        // Define Gate untuk admin
-        Gate::define('isAdmin', function (User $user) {
+        Gate::define('isAdmin', function ($user) {
             return $user->role === 'admin';
         });
 
-        // Define Gate untuk user biasa (opsional)
-        Gate::define('isUser', function (User $user) {
+        Gate::define('isUser', function ($user) {
             return $user->role === 'user';
         });
     }

@@ -81,7 +81,7 @@ class BarangController extends Controller
 
     public function exportPdf()
     {
-        $barangs = Barang::with('kategori', 'rak')->get();
+        $barangs = Barang::with(['kategori', 'rak'])->get();
         $pdf = Pdf::loadView('barang.pdf', compact('barangs'));
         return $pdf->download('data-barang.pdf');
     }

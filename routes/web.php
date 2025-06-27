@@ -31,6 +31,7 @@ Route::get('/redirect', function () {
 // Admin Area
 Route::middleware(['auth', App\Http\Middleware\IsAdmin::class])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('/kategori', KategoriController::class);
     Route::resource('/rak', RakController::class);
     Route::resource('/barang', BarangController::class);
@@ -80,6 +81,19 @@ Route::prefix('admin')->middleware(['auth', App\Http\Middleware\IsAdmin::class])
     Route::post('/permintaan-barang/{id}/reject', [PermintaanBarangController::class, 'reject'])->name('admin.permintaan-barang.reject');
     Route::get('/barang/export-pdf', [BarangController::class, 'exportPdf'])->name('admin.barang.export-pdf');
 });
+
+
+Route::get('/redirect', function () {
+    if (Auth::check()) {
+        return Auth::user()->role === 'admin'
+            ? redirect()->route('admin.dashboard')
+            : redirect()->route('user.dashboard');
+    }
+    return redirect('/login');
+})->middleware('auth');
+
+
+
 
 
 // Laravel Breeze Auth Routes
